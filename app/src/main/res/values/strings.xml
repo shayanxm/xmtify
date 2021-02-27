@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">xmtify</string>
+    <string name="com_spotify_sdk_redirect_scheme">yourscheme</string>
+    <string name="com_spotify_sdk_redirect_host">yourhost</string>
+    <string name="title_activity_splash">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+</resources>
