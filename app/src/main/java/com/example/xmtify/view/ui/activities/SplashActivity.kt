@@ -3,22 +3,26 @@ package com.example.xmtify.view.ui.activities
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.xmtify.R
+import com.example.xmtify.internal.AUTH_TOKEN_REQUEST_CODE
 import com.example.xmtify.internal.CLIENT_IDX
-import com.example.xmtify.internal.REDIRECT_URI
+import com.example.xmtify.internal.REDIRECT_URIX
 import com.example.xmtify.internal.SCOPE
 import com.spotify.sdk.android.auth.*
+import com.spotify.sdk.android.auth.AccountsQueryParameters.CLIENT_ID
+import com.spotify.sdk.android.auth.AccountsQueryParameters.REDIRECT_URI
 import com.spotify.sdk.android.auth.AuthorizationResponse
 import com.spotify.sdk.android.auth.LoginActivity.REQUEST_CODE
+
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -55,7 +59,7 @@ class SplashActivity : AppCompatActivity() {
     }
     private var isFullscreen: Boolean = false
 
-    private val hideRunnable = Runnable { hide() }
+
 
     /**
      * Touch listener to use for in-layout UI controls to delay hiding the
@@ -65,7 +69,7 @@ class SplashActivity : AppCompatActivity() {
     private val delayHideTouchListener = View.OnTouchListener { view, motionEvent ->
         when (motionEvent.action) {
             MotionEvent.ACTION_DOWN -> if (AUTO_HIDE) {
-                delayedHide(AUTO_HIDE_DELAY_MILLIS)
+
             }
             MotionEvent.ACTION_UP -> view.performClick()
             else -> {
@@ -87,11 +91,11 @@ class SplashActivity : AppCompatActivity() {
         fullscreenContent = findViewById(R.id.fullscreen_content)
         fullscreenContent.setOnClickListener { toggle() }
 
-authenticatesSpotify()
-     sharedPreferences= this.getSharedPreferences("SPOTIFY",0)
-  //volley
+//authenticatesSpotify()
+//     sharedPreferences= this.getSharedPreferences("SPOTIFY", 0)
+//  //volley
 
-
+        openPage()
 
     }
 
@@ -100,8 +104,7 @@ authenticatesSpotify()
 
         // Trigger the initial hide() shortly after the activity has been
         // created, to briefly hint to the user that UI controls
-        // are available.
-        delayedHide(100)
+
     }
 
     private fun toggle() {
@@ -115,7 +118,7 @@ authenticatesSpotify()
     private fun hide() {
         // Hide UI first
         supportActionBar?.hide()
-        fullscreenContentControls.visibility = View.GONE
+
         isFullscreen = false
 
         // Schedule a runnable to remove the status and navigation bar after a delay
@@ -139,10 +142,6 @@ authenticatesSpotify()
      * Schedules a call to hide() in [delayMillis], canceling any
      * previously scheduled calls.
      */
-    private fun delayedHide(delayMillis: Int) {
-        hideHandler.removeCallbacks(hideRunnable)
-        hideHandler.postDelayed(hideRunnable, delayMillis.toLong())
-    }
 
     companion object {
         /**
@@ -165,33 +164,90 @@ authenticatesSpotify()
     }
 
     private fun authenticatesSpotify() {
-        var builder = AuthorizationRequest.Builder(CLIENT_IDX, AuthorizationResponse.Type.TOKEN, REDIRECT_URI)
+        var builder = AuthorizationRequest.Builder(
+            CLIENT_IDX,
+            AuthorizationResponse.Type.TOKEN,
+            REDIRECT_URI
+        )
         builder.setScopes(arrayOf<String>(SCOPE))
         var request = builder.build()
         AuthorizationClient.openLoginActivity(this, REQUEST_CODE, request)
 
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE) {
-            val response: AuthorizationResponse = AuthorizationClient.getResponse(resultCode, intent)
-            when (response.type) {
-                AuthorizationResponse.Type.TOKEN -> {
-                    editor = getSharedPreferences("SPOTIFY", 0).edit()
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if (requestCode == REQUEST_CODE) {
+//            val response: AuthorizationResponse = AuthorizationClient.getResponse(
+//                resultCode,
+//                intent
+//            )
+//            when (response.type) {
+//                AuthorizationResponse.Type.TOKEN -> {
+//                    editor = getSharedPreferences("SPOTIFY", 0).edit()
+//
+//                    editor.putString("token", response.getAccessToken())
+//                    Log.d("STARTING", "GOT AUTH TOKEN")
+//                    editor.apply()
+//                    //waitForUserInfo()
+//                }
+//                else -> {
+////todo
+//                }
+//            }
+//        }
+//
+//    }
+//
+//
+//
 
-                    editor.putString("token", response.getAccessToken())
-                    Log.d("STARTING", "GOT AUTH TOKEN")
-                    editor.apply()
-                   //waitForUserInfo()
-                }
-                else -> {
-//todo
-                }
-            }
-        }
 
+//    private fun waitForUserInfo() {
+//        val userService = UserService(queue, msharedPreferences)
+//        val user=User()
+//        userService.get {
+//            val user: User = userService.getUser()
+//            editor = getSharedPreferences("SPOTIFY", 0).edit()
+//            editor.putString("userid", user.id)
+//            Log.d("STARTING", "GOT USER INFORMATION")
+//            editor.commit()
+//            startMainActivity()
+//        }
+
+ //   }
+//    private fun startMainActivity() {
+//        val newintent = Intent(this@SplashActivity, MainActivity::class.java)
+//        startActivity(newintent)
+//    }
+    private fun openPage() {
+        val request: AuthorizationRequest =
+            getAuthenticationRequest(AuthorizationResponse.Type.TOKEN)!!
+        AuthorizationClient.openLoginActivity(this, AUTH_TOKEN_REQUEST_CODE, request)
+    }
+    private fun getAuthenticationRequest(type: AuthorizationResponse.Type): AuthorizationRequest? {
+        return AuthorizationRequest.Builder(
+            CLIENT_IDX,
+            type,
+            getRedirectUri().toString()
+        )
+            .setShowDialog(false)
+            .setScopes(arrayOf("user-read-email"))
+            .setCampaign("your-campaign-token")
+            .build()
+    }
+    private fun getRedirectUri(): Uri? {
+        return Uri.parse(REDIRECT_URIX)
     }
 
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val response = AuthorizationClient.getResponse(resultCode, data)
+        if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
+           val  mAccessToken = response.accessToken
+  Log.e("showex","$mAccessToken")
+        }
+    }
 
 }

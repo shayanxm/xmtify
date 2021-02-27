@@ -16,13 +16,15 @@
             android:name=".view.ui.activities.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_splash"
-            android:theme="@style/Theme.Xmtify.Fullscreen"></activity>
-        <activity android:name=".view.ui.activities.MainActivity">
+            android:theme="@style/Theme.Xmtify.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".view.ui.activities.MainActivity">
+
         </activity>
     </application>
 
