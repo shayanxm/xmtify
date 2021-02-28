@@ -1,6 +1,7 @@
 package com.example.xmtify.view.ui.activities
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
@@ -30,8 +31,8 @@ import com.spotify.sdk.android.auth.LoginActivity.REQUEST_CODE
  */
 class SplashActivity : AppCompatActivity() {
 
-    lateinit  private var editor: SharedPreferences.Editor
-    lateinit  private var sharedPreferences: SharedPreferences
+    lateinit private var editor: SharedPreferences.Editor
+    lateinit private var sharedPreferences: SharedPreferences
 
     private lateinit var fullscreenContent: TextView
     private lateinit var fullscreenContentControls: LinearLayout
@@ -45,12 +46,12 @@ class SplashActivity : AppCompatActivity() {
         // and API 19 (KitKat). It is safe to use them, as they are inlined
         // at compile-time and do nothing on earlier devices.
         fullscreenContent.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LOW_PROFILE or
-                        View.SYSTEM_UI_FLAG_FULLSCREEN or
-                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            View.SYSTEM_UI_FLAG_LOW_PROFILE or
+                    View.SYSTEM_UI_FLAG_FULLSCREEN or
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
     }
     private val showPart2Runnable = Runnable {
         // Delayed display of UI elements
@@ -58,7 +59,6 @@ class SplashActivity : AppCompatActivity() {
         fullscreenContentControls.visibility = View.VISIBLE
     }
     private var isFullscreen: Boolean = false
-
 
 
     /**
@@ -91,11 +91,20 @@ class SplashActivity : AppCompatActivity() {
         fullscreenContent = findViewById(R.id.fullscreen_content)
         fullscreenContent.setOnClickListener { toggle() }
 
-//authenticatesSpotify()
-//     sharedPreferences= this.getSharedPreferences("SPOTIFY", 0)
-//  //volley
 
-        openPage()
+//        var tokenx = getFromSharedPrefences()
+//        Log.e("tokinini", tokenx)
+//
+        getFromSharedPrefences().let {
+            if (it != null && it != "") {
+                startMainActivity()
+            } else {
+                openPage()
+            }
+        }
+
+
+
 
     }
 
@@ -129,8 +138,8 @@ class SplashActivity : AppCompatActivity() {
     private fun show() {
         // Show the system bar
         fullscreenContent.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
         isFullscreen = true
 
         // Schedule a runnable to display UI elements after a delay
@@ -169,6 +178,7 @@ class SplashActivity : AppCompatActivity() {
             AuthorizationResponse.Type.TOKEN,
             REDIRECT_URI
         )
+
         builder.setScopes(arrayOf<String>(SCOPE))
         var request = builder.build()
         AuthorizationClient.openLoginActivity(this, REQUEST_CODE, request)
@@ -215,16 +225,18 @@ class SplashActivity : AppCompatActivity() {
 //            startMainActivity()
 //        }
 
- //   }
-//    private fun startMainActivity() {
-//        val newintent = Intent(this@SplashActivity, MainActivity::class.java)
-//        startActivity(newintent)
-//    }
+    //   }
+    private fun startMainActivity() {
+        val newintent = Intent(this@SplashActivity, MainActivity::class.java)
+        startActivity(newintent)
+    }
+
     private fun openPage() {
         val request: AuthorizationRequest =
             getAuthenticationRequest(AuthorizationResponse.Type.TOKEN)!!
         AuthorizationClient.openLoginActivity(this, AUTH_TOKEN_REQUEST_CODE, request)
     }
+
     private fun getAuthenticationRequest(type: AuthorizationResponse.Type): AuthorizationRequest? {
         return AuthorizationRequest.Builder(
             CLIENT_IDX,
@@ -236,6 +248,7 @@ class SplashActivity : AppCompatActivity() {
             .setCampaign("your-campaign-token")
             .build()
     }
+
     private fun getRedirectUri(): Uri? {
         return Uri.parse(REDIRECT_URIX)
     }
@@ -245,9 +258,28 @@ class SplashActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         val response = AuthorizationClient.getResponse(resultCode, data)
         if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
-           val  mAccessToken = response.accessToken
-  Log.e("showex","$mAccessToken")
+
+            var mAccessToken = ""
+
+            mAccessToken = response.accessToken
+            Log.e("showex", "$mAccessToken")
+            saveToSharedPrefences(mAccessToken)
+            startMainActivity()
         }
     }
 
+    private fun saveToSharedPrefences(token: String) {
+        val sharedPrefef = this.getPreferences(Context.MODE_PRIVATE) ?: return
+        with(sharedPrefef.edit()) {
+            putString(getString(R.string.TOKEN), token)
+            apply()
+        }
+    }
+
+    private fun getFromSharedPrefences(): String {
+        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
+        val defultValue = ""
+        val token = sharedPref.getString(getString(R.string.TOKEN), defultValue)
+        return token!!
+    }
 }
