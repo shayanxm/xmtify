@@ -23,16 +23,19 @@ import com.spotify.sdk.android.auth.AccountsQueryParameters.CLIENT_ID
 import com.spotify.sdk.android.auth.AccountsQueryParameters.REDIRECT_URI
 import com.spotify.sdk.android.auth.AuthorizationResponse
 import com.spotify.sdk.android.auth.LoginActivity.REQUEST_CODE
+import dagger.android.support.DaggerAppCompatActivity
+import javax.inject.Inject
 
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-class SplashActivity : AppCompatActivity() {
-
+class SplashActivity : DaggerAppCompatActivity() {
+@Inject
+lateinit var sharedPreferences: SharedPreferences
     lateinit private var editor: SharedPreferences.Editor
-    lateinit private var sharedPreferences: SharedPreferences
+    //lateinit private var sharedPreferences: SharedPreferences
 
     private lateinit var fullscreenContent: TextView
     private lateinit var fullscreenContentControls: LinearLayout
@@ -269,17 +272,19 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun saveToSharedPrefences(token: String) {
-        val sharedPrefef = this.getPreferences(Context.MODE_PRIVATE) ?: return
-        with(sharedPrefef.edit()) {
+      //  val sharedPrefef = this.getPreferences(Context.MODE_PRIVATE) ?: return
+        with(sharedPreferences.edit()) {
             putString(getString(R.string.TOKEN), token)
             apply()
         }
+
     }
 
     private fun getFromSharedPrefences(): String {
-        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
+     //   val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
+
         val defultValue = ""
-        val token = sharedPref.getString(getString(R.string.TOKEN), defultValue)
+        val token = sharedPreferences.getString(getString(R.string.TOKEN), defultValue)
         return token!!
     }
 }

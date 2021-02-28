@@ -19,7 +19,7 @@ lateinit var sharedPreferences: SharedPreferences
         get() = _data
 
     init {
-        DaggerAppComponent.create().inject(this)
+       // DaggerAppComponent.create().inject(this)
         insertData()
 
     }
