@@ -1,7 +1,9 @@
 package com.example.xmtify.di
 
 import com.example.xmtify.XmtifyApplication
+import com.example.xmtify.data.generator.UserGenerator
 import com.example.xmtify.repository.UserListRepository
+import com.example.xmtify.view.ui.activities.MainActivity
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
@@ -19,11 +21,12 @@ import javax.inject.Singleton
 interface AppComponent : AndroidInjector<DaggerApplication> {
 //    fun inject(userListRepository: UserListRepository)
 
-
+//fun inject(mainActivity: MainActivity)
     //sharedperefrences
     fun inject(application: XmtifyApplication)
     override fun inject(instance: DaggerApplication?)
 
+//fun inject(userGenerator: UserGenerator)
     @Component.Builder
     interface Builder {
         @BindsInstance

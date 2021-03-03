@@ -24,6 +24,7 @@ import com.spotify.sdk.android.auth.AccountsQueryParameters.REDIRECT_URI
 import com.spotify.sdk.android.auth.AuthorizationResponse
 import com.spotify.sdk.android.auth.LoginActivity.REQUEST_CODE
 import dagger.android.support.DaggerAppCompatActivity
+import java.lang.Exception
 import javax.inject.Inject
 
 
@@ -95,14 +96,15 @@ lateinit var sharedPreferences: SharedPreferences
         fullscreenContent.setOnClickListener { toggle() }
 
 
-//        var tokenx = getFromSharedPrefences()
-//        Log.e("tokinini", tokenx)
-//
+        var tokenx = getFromSharedPrefences()
+        Log.e("tokinini", tokenx)
+
         getFromSharedPrefences().let {
             if (it != null && it != "") {
                 startMainActivity()
             } else {
                 openPage()
+
             }
         }
 
@@ -263,8 +265,10 @@ lateinit var sharedPreferences: SharedPreferences
         if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
 
             var mAccessToken = ""
-
-            mAccessToken = response.accessToken
+try {
+    mAccessToken = response.accessToken
+}catch (ex:Exception){}
+           // mAccessToken = response.accessToken
             Log.e("showex", "$mAccessToken")
             saveToSharedPrefences(mAccessToken)
             startMainActivity()
