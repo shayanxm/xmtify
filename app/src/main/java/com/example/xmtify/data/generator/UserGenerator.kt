@@ -3,6 +3,7 @@ package com.example.xmtify.data.generator
 import android.content.SharedPreferences
 import android.util.Log
 import com.example.xmtify.data.network.XmtifyApi
+import com.example.xmtify.di.DaggerAppComponent
 import com.example.xmtify.di.DaggerAppComponentX
 import com.example.xmtify.model.User
 import io.reactivex.Observable
@@ -28,6 +29,7 @@ class UserGenerator {
     init {
         Log.e("order","gene init")
         DaggerAppComponentX.create().inject(this)
+
         Log.e("xxx","justlunching")
         getUser()
     }
