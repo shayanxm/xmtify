@@ -74,7 +74,7 @@ getfun()
         Log.e("xxx","getf")
         Log.e("order","create")
         disposable =
-            xmtifyApi.getUserInfo("Bearer "+"BQALyt1nRCORtMhqSuZd9dNGu_c1lLtCS6rIBh0uq6Hy0HJhjt4ztR7tCBxlDZaEa_zoELlAoKNNSDTMERuLeGJDaPZg0-WQW-v-CTkeZcFSru7EAi4iIueo01q0E2Bc2g_c9W1kLjghqRlo2vqtyAU")
+            xmtifyApi.getUserInfo("Bearer "+getFromSharedPrefences())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

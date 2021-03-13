@@ -24,17 +24,17 @@ lateinit var userGenerator: UserGenerator
         setContentView(R.layout.activity_main)
 
 DaggerAppComponentX.create().inject(this)
-        Log.e("rxisworking","justmain")
-
-      DaggerAppComponentX.create().inject(this)
-     Log.e("rxisworking","from main user is : ${user.displayName}")
-   //     var userGenerator:UserGenerator
-       // userGenerator= UserGenerator()
-      //  userGenerator.getUser()
-     //   userGenerator.getUser()
-        Log.e("rxisworking","from main user is : sdfasdf}")
-        Log.e("order","main")
-        Log.e("red","from main user is : ${user.displayName}")
-        Log.e("red","from main user is : ${user.email}")
+//        Log.e("rxisworking","justmain")
+//
+//      DaggerAppComponentX.create().inject(this)
+//     Log.e("rxisworking","from main user is : ${user.displayName}")
+//   //     var userGenerator:UserGenerator
+//       // userGenerator= UserGenerator()
+//      //  userGenerator.getUser()
+//     //   userGenerator.getUser()
+//        Log.e("rxisworking","from main user is : sdfasdf}")
+//        Log.e("order","main")
+//        Log.e("red","from main user is : ${user.displayName}")
+//        Log.e("red","from main user is : ${user.email}")
     }
 }
