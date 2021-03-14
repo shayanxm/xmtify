@@ -1,5 +1,7 @@
 package com.example.xmtify.data.generator
 
+import android.app.Application
+import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import com.example.xmtify.data.network.XmtifyApi
@@ -17,10 +19,10 @@ import java.util.*
 import javax.inject.Inject
 
 
-class UserGenerator {
+class UserGenerator(context: Context) {
     @Inject
     lateinit var xmtifyApi: XmtifyApi
-   // @Inject
+    @Inject
     lateinit var sharedPreferences: SharedPreferences
     var compositeDisposable = CompositeDisposable()
 
@@ -28,8 +30,8 @@ class UserGenerator {
 
     init {
         Log.e("order","gene init")
-        DaggerAppComponentX.create().inject(this)
 
+        DaggerAppComponentX.builder().application(context.applicationContext as Application).build().inject(this)
         Log.e("xxx","justlunching")
         getUser()
     }
@@ -64,6 +66,7 @@ class UserGenerator {
 //
 
 getfun()
+        getFromSharedPrefences()
 
         Log.e("xxx","getfzzzz")
 
@@ -87,8 +90,9 @@ getfun()
     private fun getFromSharedPrefences(): String {
         //   val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
 
-        val defultValue = ""
+        val defultValue = "x"
         val token = sharedPreferences.getString("TOKEN", defultValue)
+        Log.e("orderx",token)
         return token!!
     }
     private fun onFailure(t: Throwable) {

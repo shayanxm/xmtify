@@ -1,5 +1,6 @@
 package com.example.xmtify.view.ui.activities
 
+import android.app.Application
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -34,8 +35,9 @@ lateinit var userGenerator: UserGenerator
 
 
         setContentView(R.layout.activity_main)
-
-DaggerAppComponentX.create().inject(this)
+9
+        DaggerAppComponentX.builder().application(this.application).build().inject(this)
+        userGenerator.getUser()
 //        Log.e("rxisworking","justmain")
 //
 //      DaggerAppComponentX.create().inject(this)
