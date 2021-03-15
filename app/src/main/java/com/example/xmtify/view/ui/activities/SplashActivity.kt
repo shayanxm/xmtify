@@ -1,6 +1,7 @@
 package com.example.xmtify.view.ui.activities
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -14,6 +15,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.xmtify.R
+import com.example.xmtify.di.DaggerAppComponentX
 import com.example.xmtify.internal.AUTH_TOKEN_REQUEST_CODE
 import com.example.xmtify.internal.CLIENT_IDX
 import com.example.xmtify.internal.REDIRECT_URIX
@@ -32,7 +34,7 @@ import javax.inject.Inject
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-class SplashActivity : DaggerAppCompatActivity() {
+class SplashActivity : AppCompatActivity() {
 @Inject
 lateinit var sharedPreferences: SharedPreferences
     lateinit private var editor: SharedPreferences.Editor
@@ -95,6 +97,8 @@ lateinit var sharedPreferences: SharedPreferences
         fullscreenContent = findViewById(R.id.fullscreen_content)
         fullscreenContent.setOnClickListener { toggle() }
 
+
+        DaggerAppComponentX.builder().application(this.application).build().inject(this)
 
         var tokenx = getFromSharedPrefences()
         Log.e("tokinini", tokenx)
@@ -278,9 +282,10 @@ try {
     private fun saveToSharedPrefences(token: String) {
       //  val sharedPrefef = this.getPreferences(Context.MODE_PRIVATE) ?: return
         with(sharedPreferences.edit()) {
-            putString(getString(R.string.TOKEN), token)
+            putString("TOKEN", token)
             apply()
         }
+        Log.e("last",token)
 
     }
 

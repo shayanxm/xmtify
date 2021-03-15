@@ -35,7 +35,7 @@ lateinit var userGenerator: UserGenerator
 
 
         setContentView(R.layout.activity_main)
-9
+
         DaggerAppComponentX.builder().application(this.application).build().inject(this)
         userGenerator.getUser()
 //        Log.e("rxisworking","justmain")

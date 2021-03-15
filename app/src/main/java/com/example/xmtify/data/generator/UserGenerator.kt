@@ -33,6 +33,7 @@ class UserGenerator(context: Context) {
 
         DaggerAppComponentX.builder().application(context.applicationContext as Application).build().inject(this)
         Log.e("xxx","justlunching")
+
         getUser()
     }
     public fun getUser() {
@@ -93,6 +94,7 @@ getfun()
         val defultValue = "x"
         val token = sharedPreferences.getString("TOKEN", defultValue)
         Log.e("orderx",token)
+        Log.e("last","     xx       "+token)
         return token!!
     }
     private fun onFailure(t: Throwable) {
