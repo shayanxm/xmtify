@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import com.example.xmtify.R
 import com.example.xmtify.databinding.FragmentMainBinding
 import com.example.xmtify.view.viewmodel.MainActivityViewModel
@@ -15,11 +16,7 @@ import com.example.xmtify.view.viewmodel.MainActivityViewModel
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MainFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 class MainFragment : Fragment() {
     private val viewModel: MainActivityViewModel by activityViewModels()
     private var _binding: FragmentMainBinding? = null
@@ -44,7 +41,7 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupClickListeners()
-        //fragmentTextUpdateObserver()
+    fragmentTextUpdateObserver()
     }
 
 
@@ -76,13 +73,13 @@ class MainFragment : Fragment() {
 
     // Setup the button in our fragment to call getUpdatedText method in viewModel
     private fun setupClickListeners() {
-      //  binding.fragmentButton.setOnClickListener { viewModel.getUpdatedText() }
+      binding.refreshDetailsBtn.setOnClickListener { viewModel.getUpdatedText() }
     }
 
     // Observer is waiting for viewModel to update our UI
-//    private fun fragmentTextUpdateObserver() {
-//        viewModel.uiTextLiveData.observe(viewLifecycleOwner, Observer { updatedText ->
-//            binding.fragmentTextView.text = updatedText
-//        })
-//    }
+    private fun fragmentTextUpdateObserver() {
+        viewModel.uiTextLiveData.observe(viewLifecycleOwner, Observer { updatedText ->
+            binding.textView.text = updatedText
+        })
+    }
 }

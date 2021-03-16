@@ -4,10 +4,13 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import android.widget.Toast
 import com.example.xmtify.data.network.XmtifyApi
 import com.example.xmtify.di.DaggerAppComponent
 import com.example.xmtify.di.DaggerAppComponentX
 import com.example.xmtify.model.User
+import com.example.xmtify.repository.UserListRepository
+import com.example.xmtify.repository.UserRepo
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -25,7 +28,7 @@ class UserGenerator(context: Context) {
     @Inject
     lateinit var sharedPreferences: SharedPreferences
     var compositeDisposable = CompositeDisposable()
-
+var contexti=context
     var disposable: Disposable? = null
 
     init {
@@ -84,8 +87,14 @@ getfun()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                    { result -> Log.e("xxxz",result.displayName+result.email+result.id+"suuxxx") },
-                    { error ->    Log.e("xxxz",(error.message)) }
+                    { result -> UserRepo.useremail=result.email.toString()
+                        UserRepo.username=result.displayName.toString()
+                        UserRepo.userId=result.id.toString()
+
+                        Log.e("xxxz",result.displayName+result.email+result.id+"suuxxx") },
+                    { error ->
+                      //  Toast.makeText(contexti,"http error",Toast.LENGTH_LONG).show()
+                        Log.e("xxxz",(error.message)) }
                 )
     }
     private fun getFromSharedPrefences(): String {
@@ -95,6 +104,7 @@ getfun()
         val token = sharedPreferences.getString("TOKEN", defultValue)
         Log.e("orderx",token)
         Log.e("last","     xx       "+token)
+
         return token!!
     }
     private fun onFailure(t: Throwable) {
